@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Localization management</title>
+</head>
+<body>
+<h2>Conference Localization management</h2>
+<p>Input the last coordenades</p>
+ <form method=post>
+     user
+      <input type=text name=user>
+     adress
+      <input type=text name=address>
+      <input type=submit value=Upload>
+ </form>
+
+{% if closest %}
+  <span style="white-space: pre-line">{{ closest }}</span>
+{% else %}
+ <span>No talks!</span>
+{% endif %}
+
+
+</body>
+</html>

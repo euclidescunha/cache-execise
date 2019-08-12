@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Localization management</title>
+</head>
+<body>
+<h2>Localization Management</h2>
+<p>Input the last coordenades</p>
+ <form method=post>
+     user
+      <input type=text name=user>
+     adress
+      <input type=text name=address>
+      <input type=submit value=Upload>
+ </form>
+
+{% for last in last_recent_used %}
+  <span style="white-space: pre-line">{{ last }}</span>
+{% endfor %}
+
+<p>Click here to see the closest address for a address</p>
+
+</body>
+</html>

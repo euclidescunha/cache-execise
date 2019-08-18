@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  mongo:
+    container_name: "Docker-mongodb"
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: dockerfile-mongo
+    ports:
+      - "27018:27017"
+    volumes:
+      - ./.docker/mongo-data:/data/db:rw
+  redis:
+    container_name: "Docker-redis"
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: dockerfile-redis
+  web:
+    container_name: "GeoDistributedLRU-APP"
+    network_mode: "host"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./:/srv/app
+    depends_on:
+      - mongo
+      - redis

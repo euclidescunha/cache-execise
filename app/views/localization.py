@@ -42,7 +42,7 @@ def get_closest_location():
             coordenade = (address.latitude, address.longitude)
 
             for local in localizations:
-                distance = geodesic(coordenade, (local[1], local[2]))
+                distance = geodesic(coordenade, (local["latitude"], local["longitude"]))
                 if closest is None:
                     closest = local, distance
                 elif distance < closest[1]:

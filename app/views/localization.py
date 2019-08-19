@@ -1,15 +1,14 @@
 from flask import render_template, request
+from src.main.core.last_recent_used_redis import set_localization, get_localization
 
-from src.main.core.last_recent_used import GeoDistributedLRU
 from geopy.geocoders import Nominatim
 from geopy.distance import geodesic
 import logging
 
 logger = logging.getLogger(__name__)
 
-"""Initializing geocoder and LRU """
+"""Initializing geocoder"""
 geocoder = Nominatim(user_agent="my-application")
-lru = GeoDistributedLRU(max_size=2, ttl=10)
 
 
 def healthcheck():
@@ -21,14 +20,14 @@ def index():
 
     if request.method == 'POST':
         address = geocoder.geocode(request.form['address'])
-        lru.set_localization(request.form['user'],
-                             address.latitude,
-                             address.longitude)
+        set_localization(request.form['user'],
+                         address.latitude,
+                         address.longitude)
 
-        last_recent_used.append(lru.get_localization(2))
+        last_recent_used = get_localization(2)
 
     if request.method == 'GET':
-        last_recent_used.append(lru.get_localization(1))
+        last_recent_used = get_localization(1)
 
     return render_template('index.html', last_recent_used=last_recent_used)
 
@@ -37,7 +36,7 @@ def get_closest_location():
     closest = None
 
     if request.method == 'POST':
-        localizations = lru.get_localization()
+        localizations = get_localization()
         if len(localizations) > 0:
             address = geocoder.geocode(request.form['address'])
             coordenade = (address.latitude, address.longitude)

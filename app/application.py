@@ -1,5 +1,8 @@
 import logging
 import inject
+import mongoengine
+from pymongo import MongoClient
+
 from app import settings as common_settings
 from app import config
 from app.urls import app
@@ -32,11 +35,16 @@ class Application:
         logger.info("creating new last recent used with config {}".format(config_obj))
 
         self._config = Config(config_obj())
-
         self._app = app
+        self._db = self.init_database()
 
         inject.clear_and_configure(self.configure)
         logger.info("LRU loaded")
+
+    def init_database(self) -> MongoClient:
+        logger.info("connecting to mongodb {}..".format(self.config['DATABASE_URI']))
+        database_alias = "cache_lru_db"
+        return mongoengine.connect(host=self.config['DATABASE_URI'], connect=False, alias=database_alias)
 
     def get_app(self):
         return self._app
@@ -47,3 +55,8 @@ class Application:
     @property
     def config(self):
         return self._config
+
+    @property
+    def db(self) -> MongoClient:
+        return self._db
+

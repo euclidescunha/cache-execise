@@ -17,6 +17,8 @@ services:
     build:
       context: .
       dockerfile: dockerfile-redis
+    ports:
+      - "6379:6379"
   web:
     container_name: "GeoDistributedLRU-APP"
     network_mode: "host"

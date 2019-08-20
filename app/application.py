@@ -2,6 +2,7 @@ import logging
 import inject
 import mongoengine
 from pymongo import MongoClient
+from redis import StrictRedis
 
 from app import settings as common_settings
 from app import config
@@ -38,6 +39,8 @@ class Application:
         self._app = app
         self._db = self.init_database()
 
+        self._redis = self.init_redis()
+
         inject.clear_and_configure(self.configure)
         logger.info("LRU loaded")
 
@@ -46,11 +49,17 @@ class Application:
         database_alias = "cache_lru_db"
         return mongoengine.connect(host=self.config['DATABASE_URI'], connect=False, alias=database_alias)
 
+    def init_redis(self) -> StrictRedis:
+        logger.info("connecting to redis {}..".format(self.config['REDIS_URI']))
+        return StrictRedis(host=self.config['REDIS_URI'])
+
     def get_app(self):
         return self._app
 
     def configure(self, binder):
         binder.bind(config.ApplicationContext, self)
+        binder.bind(config.db, mongoengine)
+        binder.bind(config.redis, StrictRedis)
 
     @property
     def config(self):
@@ -59,4 +68,8 @@ class Application:
     @property
     def db(self) -> MongoClient:
         return self._db
+
+    @property
+    def redis(self) -> StrictRedis:
+        return self._redis
 

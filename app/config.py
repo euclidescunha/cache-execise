@@ -3,3 +3,6 @@ class ApplicationContext:
 
 class db:
     pass
+
+class redis:
+    pass

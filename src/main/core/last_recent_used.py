@@ -2,10 +2,10 @@ from cachetools import cached, TTLCache
 
 
 class GeoDistributedLRU:
-    cache = TTLCache(maxsize=10, ttl=30)
+    """"There we can use a simple cached class using cachetools"""
+    cache = TTLCache(maxsize=10, ttl=5)
 
-    def __init__(self, max_size=10, ttl=30):
-        self.cache.update(maxsize=max_size, ttl=ttl)
+    def __init__(self):
         self.coordenades = []
 
     @cached(cache)

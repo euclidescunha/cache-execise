@@ -4,7 +4,7 @@
 
 unit:
 	echo "\n\n RUNNING UNIT TESTS"
-	export PYTHONPATH=${PYTHONPATH}:src && pytest
+	export PYTHONPATH=${PYTHONPATH}:src && pytest --verbose
 
 start:
 	export PYTHONPATH=${PYTHONPATH}:src && gunicorn web.start:app

@@ -14,3 +14,6 @@ class Localization(Document):
 
     def save(self, *args, **kwargs):
         return super(Localization, self).save(*args, **kwargs)
+
+    def get(self, **kwargs):
+        return Localization.objects(**kwargs)

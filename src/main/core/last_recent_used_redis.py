@@ -13,7 +13,6 @@ class GeoDistributedLRURedis:
     @staticmethod
     @cache.cache(ttl=ttl, limit=maxsize)
     def set_localization(user, latitude: float, longitude: float, information: dict):
-        print("cache")
         localization = Localization()
         localization.user = user
         localization.latitude = latitude
@@ -26,9 +25,10 @@ class GeoDistributedLRURedis:
     @staticmethod
     @cache.cache(ttl=ttl, limit=maxsize)
     def get_localization(number_items: int = None):
-        localization = Localization.objects().all()
+        items = json.loads(Localization().get().to_json())
 
-        if number_items and localization.count() > number_items:
-            return json.loads(localization.to_json())[-number_items:]
-        return json.loads(localization.to_json())
+        if number_items and len(items) > number_items:
+            return items[-number_items:]
+
+        return items
 
